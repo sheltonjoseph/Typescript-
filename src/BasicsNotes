@@ -1,0 +1,94 @@
+// Data Types
+let name1 : string;
+// to Declare 2 differnt data types we can use |
+//eg
+let age: number | string;
+let isStudent : boolean;
+let hobbies: string[]; // array of strings
+// tuples
+let role:[number,string];
+
+ //object
+// object can contain any data types , we can design object using type or interface
+// these types and interface are called aliases
+// Type
+type Person ={
+  name: string;
+  age?:number; // ? markes the property Optional
+};
+
+// Interface
+interface Person1 {
+  name: string;
+  age?:number; // ? markes the property Optional
+};
+
+// extending Interface over Interface
+
+interface Guy extends Person {
+  profession : string
+}
+
+
+// extending type over type Eg
+
+type  X ={
+  a:string;
+  b:number;
+};
+
+type Y =X & {
+  c: string;
+  d: number
+}
+
+let testType : Y ={
+  a:"jhds",
+  b:34,
+  c:"shdg",
+  d:44,
+}
+
+// extending Interface over Type
+
+ type K=  Person & {
+   a:string;
+   b:number;
+ }
+  // extending Type over Interface
+
+  interface Person1 extends K{
+    name: string ;
+    age?: number;
+  }
+
+ 
+
+// using the person object eg
+let person: Person = {
+  name: "shelton",
+  age: 3
+} 
+
+
+
+
+
+
+// Array of Objects
+
+let lotsOfPeople : Person[]; // we are declaring the  type Person object inside the array
+
+// Array of Objects
+function printName(name:string){
+  console.log(name)
+}
+
+printName("shelly")
+
+// defining a function  type
+
+let PrintMyName: (name:string) => void; // if u want it to return undefined give void if i case it return a number or a string give accordingly
+let PrintMyName2: (name:string) => never; // never doesnt reurn anything
+// Unknown 
+let personName: unknown; // if u dont know the type of data which is going to return u can give unknown it is a better practice than "any" datatype
