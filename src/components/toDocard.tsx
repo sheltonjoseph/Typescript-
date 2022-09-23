@@ -16,14 +16,14 @@ type Props ={
 
 const toDoCard: React.FC<Props>= ({todo,todos,setTodos}) => {
     const handleDone =( id:number) =>{
-        setTodos(todos.map((todo)=>todo.id === id?{...todo,isDone: !todo.isDone}:todo))
+        setTodos(todos.map((todo)=>todo._id === id?{...todo,isDone: !todo.isDone}:todo))
     }
   return (
     <>
     <Card sx={{ minWidth: 275 }}>
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          {todo.todo}
+          {todo.description}
         </Typography>
 
       </CardContent>
