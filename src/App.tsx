@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import InputBase from "@mui/material/InputBase";
 import Button from "@mui/material/Button";
@@ -8,18 +8,47 @@ import TodoList from "./components/todolist";
 
 // declaring a react functional componenet
 const App: React.FC = () => {
-  const [todo, setTodo] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
   const [todos, setTodos] = useState<Todo[]>([]);
-
-  const handleAdd = (e: React.FormEvent) => {
+  
+  // const handleAdd = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   if (description) {
+  //     setTodos([...todos, { id: Date.now(), description, isDone: false }]);
+  //     setDescription("");
+  //   }
+  // };
+  const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (todo) {
-      setTodos([...todos, { id: Date.now(), todo, isDone: false }]);
-      setTodo("");
+    try {
+      const body = { description };
+      const response = await fetch("http://localhost:3000/items", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      console.log(response)
+      setDescription("");
+    } catch (err:any) {
+      console.error(err.message);
     }
   };
 
-  console.log(todos);
+  const getTodos = async () => {
+    try {
+      const getResponse = await fetch("http://localhost:3000/items");
+      const jsonData = await getResponse.json();
+      setTodos(jsonData);
+    } catch (err: any) {
+      console.log(err.message);
+    }
+  };
+
+
+  useEffect(() => {
+    getTodos();
+  }, [todos]);
+
 
   return (
     <div className="App">
@@ -38,9 +67,9 @@ const App: React.FC = () => {
         <InputBase
           sx={{ ml: 1, flex: 1 }}
           placeholder="Enter The task"
-          value={todo}
+          value={description}
           // inputProps={{ "aria-label": "search google maps" }}
-          onChange={(e) => setTodo(e.target.value)}
+          onChange={(e) => setDescription(e.target.value)}
         />
         <Button
           variant="contained"
@@ -50,6 +79,7 @@ const App: React.FC = () => {
             justifyContent: "center",
             borderRadius: "20px",
           }}
+          disabled={!description}
           endIcon={<AddTaskIcon />}
           onClick={handleAdd}
         />
