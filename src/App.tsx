@@ -10,14 +10,8 @@ import TodoList from "./components/todolist";
 const App: React.FC = () => {
   const [description, setDescription] = useState<string>("");
   const [todos, setTodos] = useState<Todo[]>([]);
-  
-  // const handleAdd = (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   if (description) {
-  //     setTodos([...todos, { id: Date.now(), description, isDone: false }]);
-  //     setDescription("");
-  //   }
-  // };
+  const [isGetTodos, setIsGetTodos] = useState<boolean>(true);
+
   const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -27,9 +21,9 @@ const App: React.FC = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      console.log(response)
+      setIsGetTodos(true);
       setDescription("");
-    } catch (err:any) {
+    } catch (err: any) {
       console.error(err.message);
     }
   };
@@ -44,11 +38,12 @@ const App: React.FC = () => {
     }
   };
 
-
   useEffect(() => {
-    getTodos();
-  }, [todos]);
-
+    if (isGetTodos) {
+      getTodos();
+      setIsGetTodos(false);
+    }
+  },[isGetTodos]);
 
   return (
     <div className="App">
@@ -68,7 +63,6 @@ const App: React.FC = () => {
           sx={{ ml: 1, flex: 1 }}
           placeholder="Enter The task"
           value={description}
-          // inputProps={{ "aria-label": "search google maps" }}
           onChange={(e) => setDescription(e.target.value)}
         />
         <Button
