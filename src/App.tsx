@@ -22,12 +22,17 @@ const App: React.FC = () => {
     e.preventDefault();
     try {
       const body = { description };
-      const response = await fetch("http://localhost:3000/items", {
+      const response =  fetch("http://localhost:3000/items", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      console.log(response)
+      response
+      .then(response => response.json())
+      .then(data => {
+          setTodos([...todos,data])
+      });
+ 
       setDescription("");
     } catch (err:any) {
       console.error(err.message);
@@ -47,7 +52,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     getTodos();
-  }, [todos]);
+  },[]);
 
 
   return (

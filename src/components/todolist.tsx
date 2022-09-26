@@ -10,6 +10,7 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Button } from "sheltonjoseph-npm-button";
 import Stack from "@mui/material/Stack";
+import { Console } from "console";
 
 // import { Button } from 'shelly-button';
 
@@ -19,7 +20,7 @@ interface Props {
 }
 
 const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
-var isDone = false;
+
   const deleteTodo = async (id: Number) => {
     try {
       const deleteTodo = await fetch(`http://localhost:3000/items/${id}`, {
@@ -31,13 +32,29 @@ var isDone = false;
     }
   };
 
-  const updateDescription = async (id: Number) => {
+  const updateDescription = async (id: Number,isDone:Boolean) => {
     try {
-      const body = { isDone };
-      const response = await fetch(`http://localhost:3000/items/${id}`, {
+      const body = { isDone : !isDone };
+      console.log(body)
+      const response = fetch(`http://localhost:3000/items/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
+      });
+      response
+      .then(response => response.json())
+      .then(data => {
+          let result = todos.map((res:any)=>{
+
+            if(res._id===id){
+              return {...res,isDone:data.isDone}
+            }else{
+              return res
+            }
+
+          })
+          setTodos(result)
+        // console.log(data)
       });
     } catch (err: any) {
       console.error(err.message);
@@ -68,7 +85,7 @@ var isDone = false;
             )}
             <Stack direction="row" spacing={1}>
               <Button
-                handleClick={() => updateDescription(todo._id)}
+                handleClick={() => updateDescription(todo._id, todo.isDone)}
                 label={todo.isDone ? "Completed" : "Done"}
                 kind={todo.isDone ? "completedButton" : "button"}
               />
