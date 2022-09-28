@@ -43,7 +43,7 @@ const App: React.FC = () => {
       getTodos();
       setIsGetTodos(false);
     }
-  },[isGetTodos]);
+  },[]);
 
   return (
     <div className="App">

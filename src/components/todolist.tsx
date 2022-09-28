@@ -4,9 +4,6 @@ import CardContent from "@mui/material/CardContent";
 import React, { useState } from "react";
 import { Todo } from "../model";
 import IconButton from "@mui/material/IconButton";
-// import Button from "@mui/material/Button";
-// import DoneIcon from "@mui/icons-material/Done";
-// import toDocard from "./toDoCard.tsx"
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Button } from "sheltonjoseph-npm-button";
 import Stack from "@mui/material/Stack";
@@ -24,7 +21,7 @@ const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
       const deleteTodo = await fetch(`http://localhost:3000/items/${id}`, {
         method: "DELETE",
       });
-      setTodos(todos.filter((todo) => todo._id !== id));
+      setTodos(todos.filter((todo) => todo.id !== id));
     } catch (err: any) {
       console.log(err.message);
     }
@@ -43,7 +40,7 @@ const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
         .then((response) => response.json())
         .then((data) => {
           let result = todos.map((res: any) => {
-            if (res._id === id) {
+            if (res.id === id) {
               return { ...res, isDone: data.isDone };
             } else {
               return res;
@@ -81,13 +78,13 @@ const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
             )}
             <Stack direction="row" spacing={1}>
               <Button
-                handleClick={() => updateDescription(todo._id, todo.isDone)}
+                handleClick={() => updateDescription(todo.id, todo.isDone)}
                 label={todo.isDone ? "Completed" : "Done"}
                 kind={todo.isDone ? "completedButton" : "button"}
               />
               <IconButton
                 aria-label="delete"
-                onClick={() => deleteTodo(todo._id)}
+                onClick={() => deleteTodo(todo.id)}
               >
                 <DeleteIcon />
               </IconButton>
